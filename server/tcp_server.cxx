@@ -5,6 +5,8 @@
 #include "kvstore.h"
 #include "command_handler.h"
 #include "thread_pool.h"
+#include <thread>
+#include <chrono>
 
 namespace asio = boost::asio;
 using asio::ip::tcp;
@@ -27,6 +29,12 @@ void TCPServer::handleClient(const std::shared_ptr<boost::asio::ip::tcp::socket>
 }
 
 void TCPServer::run() {
+    std::thread([store = m_store](){
+        while(true) {
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+            store->updateDB();
+        }
+    }).detach();
     CommandHandler command_handler(m_store);
     ThreadPool thread_pool;
     while (true) {
@@ -43,6 +51,4 @@ void TCPServer::run() {
             std::cerr << "Exception: " << e.what() << std::endl;
         }
     }
-    
-    
 }

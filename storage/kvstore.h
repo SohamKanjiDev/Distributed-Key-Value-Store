@@ -9,6 +9,11 @@ class KVStore
     public:
 
     /**
+     * Constructor.
+    */
+    KVStore();
+    
+    /**
      * Set the value for the given key. 
      * @param[in] key is the key. 
      * @param[in] value is the value.
@@ -35,6 +40,18 @@ class KVStore
     size_t size() const {
         return m_store.size();
     }
+
+    /**
+     * Updates the DB with the current key-value information.
+    */
+    void updateDB() const;
+
+    private:
+
+    /**
+     * Loads data from DB onto memory.
+    */
+    void loadFromDB();
 
     private:
 

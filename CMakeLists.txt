@@ -28,6 +28,18 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(fmt)
 
+FetchContent_Declare(
+  sqlite3
+  URL https://www.sqlite.org/2024/sqlite-amalgamation-3450100.zip
+)
+
+FetchContent_MakeAvailable(sqlite3)
+
+add_library(sqlite3 STATIC 
+  ${sqlite3_SOURCE_DIR}/sqlite3.c 
+  ${sqlite3_SOURCE_DIR}/sqlite3.h
+)
+
 add_subdirectory(storage)
 add_subdirectory(server)
 add_subdirectory(app)
