@@ -2,13 +2,12 @@
 #include <sqlite3.h>
 #include <iostream>
 
-constexpr static char* DB_FILE_NAME = "backup.db";
 constexpr static char* CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS kvstore (key TEXT PRIMARY KEY, value TEXT);";
 constexpr static char* DUMP_KEY_VALUE_SQL = "REPLACE INTO kvstore (key, value) VALUES (?, ?);";
 constexpr static char* SELECT_ALL_SQL = "SELECT * FROM kvstore;";
 
-KVStore::KVStore() {
-    loadFromDB();
+KVStore::KVStore(const std::string& db_name) {
+    loadFromDB(db_name);
 }
 
 void KVStore::set(const std::string& key, const std::string& value) {
@@ -32,11 +31,11 @@ void KVStore::remove(const std::string& key) {
     m_store.erase(key);
 }
 
-void KVStore::updateDB() const
+void KVStore::updateDB(const std::string& db_name) const
 {
     std::scoped_lock lock(m_mutex);
     sqlite3* db;
-    if(sqlite3_open(DB_FILE_NAME, &db)) {
+    if(sqlite3_open(db_name.c_str(), &db)) {
         std::cerr << "Failed to open db." << std::endl;
         return;
     }
@@ -76,9 +75,9 @@ static int load_in_memory(void* data, int number_of_columns, char** column_value
     return 0;
 }
 
-void KVStore::loadFromDB() {
+void KVStore::loadFromDB(const std::string& db_name) {
     sqlite3* db;
-    if(sqlite3_open(DB_FILE_NAME, &db)) {
+    if(sqlite3_open(db_name.c_str(), &db)) {
         std::cerr << "Failed to open db." << std::endl;
         return;
     }

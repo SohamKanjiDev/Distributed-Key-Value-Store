@@ -11,8 +11,10 @@
 namespace asio = boost::asio;
 using asio::ip::tcp;
 
+constexpr static char* DB_FILE_NAME = "backup.db";
+
 TCPServer::TCPServer(asio::io_context& context, int port) : m_io_context(context),m_acceptor(tcp::acceptor(context, tcp::endpoint(tcp::v4(), port))) {
-    m_store = std::make_shared<KVStore>();
+    m_store = std::make_shared<KVStore>(DB_FILE_NAME);
 }
 
 void TCPServer::handleClient(const std::shared_ptr<boost::asio::ip::tcp::socket>& socket, CommandHandler& handler)
@@ -42,9 +44,9 @@ void TCPServer::run() {
     std::thread background_thread([this](){
         while(!m_shutdown.load()) {
             std::this_thread::sleep_for(std::chrono::seconds(2));
-            m_store->updateDB();
+            m_store->updateDB(DB_FILE_NAME);
         }
-        m_store->updateDB();
+        m_store->updateDB(DB_FILE_NAME);
     });
     CommandHandler command_handler(m_store);
     ThreadPool thread_pool;

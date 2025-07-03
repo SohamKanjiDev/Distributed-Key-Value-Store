@@ -10,8 +10,9 @@ class KVStore
 
     /**
      * Constructor.
+     * @param[in] db_name: is the db file name we want to load initial data from.
     */
-    KVStore();
+    KVStore(const std::string& db_name);
     
     /**
      * Set the value for the given key. 
@@ -43,15 +44,17 @@ class KVStore
 
     /**
      * Updates the DB with the current key-value information.
+     * @param[in] db_name: is the db name.
     */
-    void updateDB() const;
+    void updateDB(const std::string& db_name) const;
 
     private:
 
     /**
      * Loads data from DB onto memory.
+     * @param[in] db_name: is the db file name we want to load initial data from.
     */
-    void loadFromDB();
+    void loadFromDB(const std::string& db_name);
 
     private:
 
