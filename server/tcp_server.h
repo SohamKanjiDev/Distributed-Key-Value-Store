@@ -1,6 +1,7 @@
 #pragma once
 #include <boost/asio.hpp>
 #include <memory>
+#include <atomic>
 
 class KVStore;
 class CommandHandler;
@@ -21,6 +22,12 @@ class TCPServer
     */
     void run();
 
+    /**
+     * Sets m_shutdown to true so that we can  
+     * close server gracefully.
+    */
+    void shutdown();
+
     private: 
 
     /**
@@ -35,4 +42,5 @@ class TCPServer
     boost::asio::ip::tcp::acceptor m_acceptor;
     boost::asio::io_context& m_io_context;
     std::shared_ptr<KVStore> m_store;
+    std::atomic<bool> m_shutdown{false};
 };
