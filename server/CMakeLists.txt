@@ -7,4 +7,5 @@ target_link_libraries(TCPServer PUBLIC
     KVStore
     CommandHandler
     Utils
+    NodeManager
 )

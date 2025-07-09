@@ -5,10 +5,19 @@ project(KeyValueStore VERSION 1.0.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g")
 
 find_package(Boost REQUIRED COMPONENTS system)
 
 include(FetchContent)
+
+FetchContent_Declare(
+  nlohmann_json
+  GIT_REPOSITORY https://github.com/nlohmann/json
+  GIT_TAG v3.12.0
+)
+
+FetchContent_MakeAvailable(nlohmann_json)
 
 FetchContent_Declare(
   boost_asio
@@ -60,3 +69,5 @@ add_subdirectory(command)
 add_subdirectory(utils)
 add_subdirectory(client)
 add_subdirectory(tests)
+add_subdirectory(node_parser)
+add_subdirectory(node_manager)

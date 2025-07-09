@@ -4,5 +4,6 @@ target_link_libraries(CommandHandler PUBLIC
     KVStore
     fmt
     Utils
+    NodeManager
     ${Boost_LIBRARIES}
 )

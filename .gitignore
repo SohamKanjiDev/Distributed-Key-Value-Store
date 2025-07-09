@@ -1,2 +1,4 @@
 .vscode
 build/
+backup_*
+node_config.json
